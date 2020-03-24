@@ -3,12 +3,14 @@ import Dropdown from "react-dropdown";
 import parse from "html-react-parser";
 import {fetchShow} from './api/fetchShow'
 
+
 import { formatSeasons } from "./utils/formatSeasons";
 
 import Episodes from "./components/Episodes";
 import "./styles.css";
 
 export default function App() {
+
   const [show, setShow] = useState(null);
   const [seasons, setSeasons] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState("");
@@ -17,6 +19,7 @@ export default function App() {
   useEffect(() => {
     fetchShow()
     .then(res => {
+      // console.log(res)
       setShow(res.data);
       setSeasons(formatSeasons(res.data._embedded.episodes));
     });
@@ -31,11 +34,15 @@ export default function App() {
   }
 
   return (
-    <div className="App">
+    <div   className="App">
       <img className="poster-img" src={show.image.original} alt={show.name} />
-      <h1>{show.name}</h1>
+      <h1 data-testid='apptitle'>{show.name}</h1>
+      <div >
       {parse(show.summary)}
+      </div>
+     
       <Dropdown
+        
         options={Object.keys(seasons)}
         onChange={handleSelect}
         value={selectedSeason || "Select a season"}
